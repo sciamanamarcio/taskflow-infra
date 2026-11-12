@@ -1,0 +1,21 @@
+framework:
+  - terraform
+quiet: true
+compact: true
+skip-download: true
+
+# Each skipped check is a conscious decision for this small portfolio stack.
+# Most of them are production hardening that adds cost or extra resources.
+skip-check:
+  - CKV_AWS_18    # S3 access logging needs a dedicated log bucket (roadmap)
+  - CKV_AWS_68    # No WAF in front of CloudFront: out of scope and cost for a static site
+  - CKV_AWS_86    # CloudFront access logging needs a dedicated log bucket (roadmap)
+  - CKV_AWS_144   # Cross-region replication doubles storage cost; versioning is enough here
+  - CKV_AWS_145   # SSE-S3 (AES256) is used instead of KMS to avoid per-request KMS charges
+  - CKV_AWS_174   # The default CloudFront certificate does not allow choosing the TLS version
+  - CKV_AWS_310   # A single origin is enough for a static site
+  - CKV_AWS_374   # The site is public worldwide, so no geo restriction
+  - CKV2_AWS_32   # The managed security headers policy is attached to the default behavior
+  - CKV2_AWS_42   # No custom domain yet, so the default CloudFront certificate is used
+  - CKV2_AWS_47   # No WAF in this stack, so there is no Log4j rule to attach
+  - CKV2_AWS_62   # Event notifications are not needed for these buckets
